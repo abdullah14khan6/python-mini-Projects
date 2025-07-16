@@ -1,6 +1,6 @@
 from random import randint , seed
 import os
-def intGuess():
+def intGuess(): # input
     guess= int(input('Enter a guess: '))
     return guess
 
@@ -19,7 +19,7 @@ def game(rand, guess, tries):
                 print('Perfect Guess')
                 print(f'You guessed the number in {tries} tries\n')
                 break
-seed(23)
+seed(23) # to randomize rand values
 while True:
     print('Welcome to THE PERFECT GUESS\n')
     rand = randint(1, 100)
