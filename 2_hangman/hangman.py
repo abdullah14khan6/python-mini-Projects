@@ -1,5 +1,4 @@
 import random
-import os
 from wordsets import wordSets
 
 
@@ -24,68 +23,80 @@ def fre(word): # returns frequency of each letter
 
 
 def main():
-    category = random.choice(list(wordSets.keys())) # selects a random category
-    word = random.choice(wordSets[category]) # selects a random word from that category
-    size = len(word)
-    chances = size+3
-    guessed = ["_" for i in range(0,size)] # list for storing guesses
-    wordFre = fre(word)
-    
-    print(wordFre)
-    print(f"GUESS THE WORD\n\nHINT: The word is a {str(category).upper()}")
-    print(f"You have {chances} chances to guess the correct letters. We will show one letter")
-    print(word) # for testing
-    
-    hintIndex = random.randint(0,size-1) # give the first letter as hint
-    hint = word[hintIndex]
-    guessed.insert(hintIndex,hint) # inserts that letter at that index
-    wordFre[hint][0] -= 1
-    
-    print(wordFre)
-    
-    # if(wordFre[hint] == 0):
-    #     del wordFre[hint]
-    
-    for i in guessed: # prints the guessed leters
-        print(i,end=" ")
-    print("\n") # to add a newline character
-    
     while True:
-        char = input("Enter a letter: ")
+        category = random.choice(list(wordSets.keys())) # selects a random category
+        word = random.choice(wordSets[category]) # selects a random word from that category
+        size = len(word)
+        chances = size+3
+        guessed = ["_" for i in range(0,size)] # list for storing guesses
+        wordFre = fre(word)
         
-        if not char.isalpha():
-            print("Only enter a letter")
-            continue
-
-        if len(char) > 1:
-            print("Only enter one letter")
-            continue
+        # print(wordFre) # for testing
+        # print(word) # for testing
         
-        if char not in word:
-            print("letter is not in word")
-            continue
+        hintIndex = random.randint(0,size-1) # give the first letter as hint
+        hint = word[hintIndex]
+        guessed[hintIndex] = hint # inserts that letter at that index
+        wordFre[hint][0] -= 1
+        del wordFre[hint][1][0] # deletes the first occurance index
+        
+        # print(wordFre) # for testing
+        
+        
+        while True:
+            flag = True # flag to check if all the words are guessed
+            if chances == 0:
+                print("OUT OF LIVES, BEST OF LUCK NEXT TIME")
+                break
             
-        if char in guessed:
-            if wordFre[char][0] <= guessed.count(char):
-                print("letter already present")
+            print(f"GUESS THE WORD\nHINT: The word is a {str(category).upper()}")
+            print(f"You have {chances} chances to guess the correct letters\n")
+            for i in guessed: # prints the guessed leters
+                if i == "_":
+                    flag = False
+                print(i,end=" ")
+            print("\n")
+            
+            char = input("Enter a letter: ")
+            
+            chances -= 1
+            if not char.isalpha(): # skip if not alphabet
+                print("\nOnly enter a letter\n")
                 continue
+
+            if len(char) > 1: # skip if more than 1 letter
+                print("\nOnly enter one letter\n")
+                continue
+            
+            if char not in word: # skip if not in word
+                print("\nletter is not in word\n")
+                continue
+                
+            if char in guessed:
+                if wordFre[char][0] < guessed.count(char): # skip if already guessed all occurances
+                    print("\nletter already present\n")
+                    continue
+            
+            wordFre[char][0] -= 1
+            indexList = wordFre[char][1]
+            guessed[indexList[0]] = char
+            del wordFre[char][1][0]
+            
+            for i in guessed: # prints the guessed leters
+                if i == "_":
+                    flag = False
+                print(i,end=" ")
+            print() # to add a newline character
+            
+            if flag == True:
+                print("CONGRATULATIONS YOU HAVE GUESSED ALL THE LETTERS CORRECTLY!")
+                break # leaves the loop
         
-        
-        
-        # for i in range(0, size):
-        #     if char == word[i]:
-        #         index = wordFre[char][1]
-        
-        
-        # for i in range(0,size):
-        #     temp = guessed[i]
-        #     for j in range(0,size):
-        #         if temp == word[i]:
-                    
-        #             print(char, end= " ")
-        #         else:
-        #             print("_", end= " ")
-        print("\n")
+    
+        print("\nDo you wish to play again?")
+        buffer = input("Enter yes or no: ")
+        if "yes" not in buffer:
+            break
             
     
     
