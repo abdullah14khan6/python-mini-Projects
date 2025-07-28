@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import random
 from wordsets import wordSets
 
@@ -52,8 +54,6 @@ def main():
             print(f"GUESS THE WORD\nHINT: The word is a {str(category).upper()}")
             print(f"You have {chances} chances to guess the correct letters\n")
             for i in guessed: # prints the guessed leters
-                if i == "_":
-                    flag = False
                 print(i,end=" ")
             print("\n")
             
@@ -82,11 +82,9 @@ def main():
             guessed[indexList[0]] = char
             del wordFre[char][1][0]
             
-            for i in guessed: # prints the guessed leters
+            for i in guessed: # checks if all the letters are guessed
                 if i == "_":
                     flag = False
-                print(i,end=" ")
-            print() # to add a newline character
             
             if flag == True:
                 print("CONGRATULATIONS YOU HAVE GUESSED ALL THE LETTERS CORRECTLY!")
